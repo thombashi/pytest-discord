@@ -35,20 +35,31 @@ Installation
     pip install pytest-discord
 
 
-Usage
+Quick start
 ============================================
+
+Making a Discord webhook
+--------------------------------------------
+https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+
+
+Usage
+--------------------------------------------
+Set a webhook URL when executing ``pytest`` via ``--discord-webhook`` option:
+
 ::
 
     $ pytest --discord-webhook=<https://discordapp.com/api/webhooks/...>
 
-Or 
+
+Or, set a webhook URL to an environment variable ``PYTEST_DISCORD_WEBHOOK``:
 
 ::
 
     $ export PYTEST_DISCORD_WEBHOOK=<https://discordapp.com/api/webhooks/...>
     $ pytest
 
-Or, you can specify webhook URL of a discord channel via a config file.
+Or, you can specify webhook URL of a discord channel via ini-options.
 
 
 Increse the verbosity level
