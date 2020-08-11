@@ -236,7 +236,7 @@ def _concat_longrepr(reporter: TerminalReporter) -> str:
     return "\n\n\n".join(messages)
 
 
-def make_mdreport(config: Config) -> str:
+def _make_md_report(config: Config) -> str:
     from pytest_md_report import ColorPoicy, ZerosRender, make_md_report, retrieve_stat_count_map
 
     opt_retriever = DiscordOptRetriever(config)
@@ -277,7 +277,7 @@ def pytest_unconfigure(config):
 
     verbosity_level = opt_retriever.retrieve_verbosity_level()
     reporter = config.pluginmanager.get_plugin("terminalreporter")
-    md_report = make_mdreport(config)
+    md_report = _make_md_report(config)
 
     try:
         duration = time.time() - reporter._sessionstarttime
