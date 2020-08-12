@@ -2,7 +2,7 @@ import asyncio
 import io
 import time
 from datetime import datetime
-from typing import Dict, Optional, Sequence, Tuple
+from typing import Dict, Mapping, Optional, Sequence, Tuple
 
 import aiohttp
 import pytest
@@ -10,8 +10,9 @@ from _pytest.config import Config
 from _pytest.terminal import TerminalReporter
 from discord import AsyncWebhookAdapter, Colour, Embed, File, Webhook
 from discord.errors import Forbidden, HTTPException, InvalidArgument, NotFound
+from pytest_md_report.plugin import extract_pytest_stats
 
-from ._const import HelpMsg, Option
+from ._const import HelpMsg, Option, TestResultType
 from ._opt_retriever import DiscordOptRetriever
 
 
@@ -174,6 +175,26 @@ def _make_md_report(config: Config) -> str:
 logs = []
 
 
+def extract_result_type(pytest_stats: Mapping[str, int]) -> TestResultType:
+    if sum([pytest_stats[name] for name in ("failed", "error")]):
+        return TestResultType.FAIL
+
+    if (
+        sum([pytest_stats[name] for name in ("skipped", "xfailed", "xpassed")])
+        and pytest_stats["passed"] == 0
+    ):
+        return TestResultType.SKIP
+
+    return TestResultType.SUCCESS
+
+
+_result_type_to_colour = {
+    TestResultType.SUCCESS: Colour.green(),
+    TestResultType.SKIP: Colour.gold(),
+    TestResultType.FAIL: Colour.red(),
+}
+
+
 def pytest_unconfigure(config):
     opt_retriever = DiscordOptRetriever(config)
     url = opt_retriever.retrieve_webhook_url()
@@ -204,14 +225,11 @@ def pytest_unconfigure(config):
         avatar_url = opt_retriever.retrieve_success_icon()
         colour = Colour.green()
 
-    if verbosity_level >= 1:
-        description = _decorate_code_block(lang="md", text="# test results\n{}".format(md_report))
-    else:
-        description = "{} in {:.1f} seconds".format(message, duration)
-
-    header = "test summary info: {} tests".format(sum(stat_count_map.values()))
     embeds = []  # type: List[Embed]
-    embed_summary = Embed(description=description, colour=colour)
+
+    embed_summary = Embed(
+        description="{} in {:.1f} seconds".format(message, duration), colour=colour
+    )
     embed_summary.set_footer(
         text="start at {}".format(
             datetime.fromtimestamp(reporter._sessionstarttime).strftime("%d. %b %H:%M:%S%z")
@@ -220,8 +238,36 @@ def pytest_unconfigure(config):
     embeds.append(embed_summary)
 
     if verbosity_level >= 1:
-        embeds.append(Embed(description=_concat_longrepr(reporter), colour=colour))
+        pytest_stats = extract_pytest_stats(
+            reporter=reporter,
+            outcomes=["passed", "failed", "error", "skipped", "xfailed", "xpassed"],
+            verbosity_level=max(0, verbosity_level - 1),
+        )
+        for key, stats in pytest_stats.items():
+            embeds.append(
+                Embed(
+                    description="`{target}`\n{results}".format(
+                        target=": ".join(key),
+                        results=", ".join(
+                            ["`{}` {}".format(ct, outcome) for outcome, ct in stats.items()]
+                        ),
+                    ),
+                    colour=_result_type_to_colour[extract_result_type(stats)],
+                )
+            )
 
+        embed_summary = Embed(
+            description=_decorate_code_block(
+                lang="md", text="# test results\n{}".format(md_report)
+            ),
+            colour=colour,
+        )
+
+        description = _concat_longrepr(reporter)
+        if description:
+            embeds.append(Embed(description=description, colour=colour))
+
+    header = "test summary info: {} tests".format(sum(stat_count_map.values()))
     attach_file = None
 
     if opt_retriever.retrieve_attach_file():

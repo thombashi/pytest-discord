@@ -10,6 +10,11 @@ class Default:
     USERNAME = "pytest-discord"
 
 
+@unique
+class TestResultType(Enum):
+    SUCCESS = 1
+    SKIP = 2
+    FAIL = 3
 
 
 @unique
