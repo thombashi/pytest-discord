@@ -233,6 +233,7 @@ def pytest_unconfigure(config):
 
     embeds = []  # type: List[Embed]
     embeds_len_ct = 100
+    exceeds_embeds_limit = False
 
     embed_summary = Embed(
         description="{} in {:.1f} seconds".format(message, duration), colour=colour
@@ -284,6 +285,7 @@ def pytest_unconfigure(config):
                         description="and other {} failed".format(len(longreprs) - i), colour=colour
                     )
                 )
+                exceeds_embeds_limit = True
                 break
 
             embeds.append(Embed(description=description, colour=colour))
@@ -292,7 +294,7 @@ def pytest_unconfigure(config):
     header = "test summary info: {} tests".format(sum(stat_count_map.values()))
     attach_file = None
 
-    if opt_retriever.retrieve_attach_file():
+    if opt_retriever.retrieve_attach_file() or exceeds_embeds_limit:
         attach_file = File(
             io.BytesIO(
                 "# {}\n{}\n\n{}".format(
