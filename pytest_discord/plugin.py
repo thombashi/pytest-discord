@@ -142,7 +142,7 @@ def _concat_longrepr(reporter: TerminalReporter) -> str:
 
 
 def _make_md_report(config: Config) -> str:
-    from pytest_md_report import ColorPoicy, ZerosRender, make_md_report, retrieve_stat_count_map
+    from pytest_md_report import ColorPolicy, ZerosRender, make_md_report, retrieve_stat_count_map
 
     opt_retriever = DiscordOptRetriever(config)
     verbosity_level = opt_retriever.retrieve_verbosity_level()
@@ -162,7 +162,7 @@ def _make_md_report(config: Config) -> str:
         config.option.md_report_margin = 1
 
     try:
-        config.option.md_report_color = ColorPoicy.NEVER
+        config.option.md_report_color = ColorPolicy.NEVER
         config.option.md_report_zeros = ZerosRender.EMPTY
 
         return make_md_report(config, reporter, stat_count_map)

@@ -2,18 +2,14 @@ from enum import Enum, unique
 from textwrap import dedent
 
 from pathvalidate import replace_symbol
-
-
-class ColorPoicy:
-    AUTO = "auto"
-    TEXT = "text"
-    NEVER = "never"
-    LIST = (AUTO, TEXT, NEVER)
+from pytest_md_report import ColorPolicy
 
 
 class Default:
-    COLOR = ColorPoicy.AUTO
+    COLOR = ColorPolicy.AUTO
     USERNAME = "pytest-discord"
+
+
 
 
 @unique
