@@ -172,7 +172,7 @@ def _make_md_report(config: Config) -> str:
         config.option.md_report_zeros = stash_md_report_zeros
 
 
-logs = []
+_logs = []
 
 
 def extract_result_type(pytest_stats: Mapping[str, int]) -> TestResultType:
@@ -320,8 +320,8 @@ async def _send_message(
 @pytest.hookimpl()  # after _pytest.runner
 def pytest_report_teststatus(report):
     if report.longreprtext:
-        logs.append(report.longreprtext)
+        _logs.append(report.longreprtext)
     if report.capstdout:
-        logs.append(report.capstdout)
+        _logs.append(report.capstdout)
     if report.capstderr:
-        logs.append(report.capstderr)
+        _logs.append(report.capstderr)
