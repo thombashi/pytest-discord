@@ -1,6 +1,7 @@
 import asyncio
 import io
 import time
+from collections import defaultdict
 from datetime import datetime
 from typing import Dict, Mapping, Optional, Sequence, Tuple
 
@@ -14,6 +15,9 @@ from pytest_md_report.plugin import extract_pytest_stats
 
 from ._const import HelpMsg, Option, TestResultType
 from ._opt_retriever import DiscordOptRetriever
+
+
+MAX_EMBED_LEN = 2048
 
 
 def pytest_addoption(parser):
@@ -243,16 +247,23 @@ def pytest_unconfigure(config):
             outcomes=["passed", "failed", "error", "skipped", "xfailed", "xpassed"],
             verbosity_level=max(0, verbosity_level - 1),
         )
+        result_lines_map = defaultdict(list)
+
         for key, stats in pytest_stats.items():
+            result_lines_map[extract_result_type(stats)].append(
+                "`{}`: {}".format(
+                    ":".join(key),
+                    ", ".join(
+                        ["`{}` {}".format(ct, outcome) for outcome, ct in stats.items() if ct > 0]
+                    ),
+                )
+            )
+
+        for result_type, result_lines in result_lines_map.items():
             embeds.append(
                 Embed(
-                    description="`{target}`\n{results}".format(
-                        target=": ".join(key),
-                        results=", ".join(
-                            ["`{}` {}".format(ct, outcome) for outcome, ct in stats.items()]
-                        ),
-                    ),
-                    colour=_result_type_to_colour[extract_result_type(stats)],
+                    description="\n".join(result_lines)[:MAX_EMBED_LEN],
+                    colour=_result_type_to_colour[result_type],
                 )
             )
 
