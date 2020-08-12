@@ -3,7 +3,7 @@ import io
 import time
 from collections import defaultdict
 from datetime import datetime
-from typing import Dict, Mapping, Optional, Sequence, Tuple
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 import aiohttp
 import pytest
@@ -125,7 +125,7 @@ def _decorate_code_block(lang: str, text: str) -> str:
     return "```{lang}\n{body}\n```\n".format(lang=lang, body=text)
 
 
-def _concat_longrepr(reporter: TerminalReporter) -> str:
+def _extract_longrepr(reporter: TerminalReporter) -> List[str]:
     messages = []
 
     for stat_key, values in reporter.stats.items():
@@ -143,7 +143,7 @@ def _concat_longrepr(reporter: TerminalReporter) -> str:
             except AttributeError:
                 pass
 
-    return "\n\n\n".join(messages)
+    return messages
 
 
 def _make_md_report(config: Config) -> str:
@@ -230,6 +230,7 @@ def pytest_unconfigure(config):
         colour = Colour.green()
 
     embeds = []  # type: List[Embed]
+    embeds_len_ct = 100
 
     embed_summary = Embed(
         description="{} in {:.1f} seconds".format(message, duration), colour=colour
@@ -267,16 +268,24 @@ def pytest_unconfigure(config):
                 )
             )
 
-        embed_summary = Embed(
-            description=_decorate_code_block(
-                lang="md", text="# test results\n{}".format(md_report)
-            ),
-            colour=colour,
-        )
+        description = _decorate_code_block(lang="md", text="# test results\n{}".format(md_report))
+        embed_summary = Embed(description=description, colour=colour,)
+        embeds_len_ct += len(description)
 
-        description = _concat_longrepr(reporter)
-        if description:
+        longreprs = _extract_longrepr(reporter)
+        for i, description in enumerate(longreprs):
+            description = description[-MAX_EMBED_LEN:]
+
+            if len(embeds) >= MAX_EMBED_CT or (len(description) + embeds_len_ct) > MAX_EMBEDS_LEN:
+                embeds.append(
+                    Embed(
+                        description="and other {} failed".format(len(longreprs) - i), colour=colour
+                    )
+                )
+                break
+
             embeds.append(Embed(description=description, colour=colour))
+            embeds_len_ct += len(description)
 
     header = "test summary info: {} tests".format(sum(stat_count_map.values()))
     attach_file = None
@@ -284,9 +293,9 @@ def pytest_unconfigure(config):
     if opt_retriever.retrieve_attach_file():
         attach_file = File(
             io.BytesIO(
-                "# {}\n{}\n\n{}".format(header, md_report, _concat_longrepr(reporter)).encode(
-                    "utf8"
-                )
+                "# {}\n{}\n\n{}".format(
+                    header, md_report, "\n\n".join(_extract_longrepr(reporter))
+                ).encode("utf8")
             ),
             datetime.fromtimestamp(reporter._sessionstarttime).strftime(
                 "pytest_%Y-%m-%dT%H:%M:%S.md"
