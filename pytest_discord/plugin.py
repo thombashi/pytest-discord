@@ -317,7 +317,7 @@ async def _send_message(
         )
 
 
-@pytest.hookimpl()  # after _pytest.runner
+@pytest.hookimpl()
 def pytest_report_teststatus(report):
     if report.longreprtext:
         _logs.append(report.longreprtext)
