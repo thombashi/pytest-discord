@@ -51,7 +51,7 @@ Set a webhook URL when executing ``pytest`` via ``--discord-webhook`` option:
 
     $ pytest --discord-webhook=<https://discordapp.com/api/webhooks/...>
 
-.. figure:: ss/pytest-discord.png
+.. figure:: https://cdn.jsdelivr.net/gh/thombashi/pytest-discord@master/ss/pytest-discord.png
     :scale: 80%
     :alt: https://github.com/thombashi/pytest-discord/blob/master/ss/pytest-discord.png
 
@@ -73,7 +73,7 @@ Increse the verbosity level
 
     $ pytest --discord-verbose=1
 
-.. figure:: ss/pytest-discord_verbose.png
+.. figure:: https://cdn.jsdelivr.net/gh/thombashi/pytest-discord@master/ss/pytest-discord_verbose.png
     :scale: 80%
     :alt: https://github.com/thombashi/pytest-discord/blob/master/ss/pytest-discord_verbose.png
 
