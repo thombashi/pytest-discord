@@ -202,6 +202,9 @@ _result_type_to_colour = {
 
 
 def pytest_unconfigure(config):
+    if config.option.help:
+        return
+
     opt_retriever = DiscordOptRetriever(config)
     url = opt_retriever.retrieve_webhook_url()
     if not url:
