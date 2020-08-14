@@ -42,7 +42,7 @@ setuptools.setup(
     url=REPOSITORY_URL,
     author=pkg_info["__author__"],
     author_email=pkg_info["__email__"],
-    description="A pytest plugin to report test results to a Discord channel.",
+    description="A pytest plugin to notify test results to a Discord channel.",
     include_package_data=True,
     keywords=["discord", "plugin", "pytest"],
     license=pkg_info["__license__"],
