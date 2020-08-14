@@ -25,7 +25,7 @@ Summary
     :target: https://ci.appveyor.com/project/thombashi/pytest-discord/branch/master
     :alt: Windows CI status
 
-A pytest plugin to report test results to a discord channel.
+A pytest plugin to notify test results to a Discord channel.
 
 
 Installation
@@ -64,7 +64,7 @@ Or, set a webhook URL to an environment variable ``PYTEST_DISCORD_WEBHOOK``:
     $ export PYTEST_DISCORD_WEBHOOK=<https://discordapp.com/api/webhooks/...>
     $ pytest
 
-Or, you can specify webhook URL of a discord channel via ini-options.
+Or, you can specify webhook URL of a discord channel via ini-options (described later).
 
 
 Increse the verbosity level
@@ -78,6 +78,9 @@ Increse the verbosity level
     :alt: https://github.com/thombashi/pytest-discord/blob/master/ss/pytest-discord_verbose.png
 
     Notification message example
+
+Notification messages may omit information caused by Discord limitations (especially when errors occurred).
+You can get full messages as an attached markdown file with ``--discord-attach-file`` option
 
 
 Options
