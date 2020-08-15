@@ -41,6 +41,6 @@ jobs:
 
       - name: Run Tox
         run: |
-          tox -e py
+          tox -e py -- --discord-webhook=$PYTEST_DISCORD_WEBHOOK
         env:
           PYTEST_DISCORD_WEBHOOK: ${{ secrets.PYTEST_DISCORD_WEBHOOK }}
