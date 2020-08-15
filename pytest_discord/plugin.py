@@ -148,6 +148,56 @@ def _extract_longrepr(reporter: TerminalReporter) -> List[str]:
     return messages
 
 
+def _extract_longrepr_embeds(
+    reporter: TerminalReporter, embed_len: int, colour: Colour
+) -> Tuple[List[Embed], bool]:
+    embeds = []
+    total_embed_len = embed_len
+    exceeds_embeds_limit = False
+
+    for stat_key, values in reporter.stats.items():
+        if not stat_key or stat_key not in ["failed", "error"]:
+            continue
+
+        for i, value in enumerate(values):
+            try:
+                if not value.longrepr:
+                    continue
+            except AttributeError:
+                continue
+
+            lines_len = 0
+            lines = []  # type: List[str]
+            for line in reversed(str(value.longrepr).splitlines()):
+                if (lines_len + len(line)) > (MAX_EMBED_LEN - 64):
+                    break
+
+                lines.insert(0, line)
+                lines_len += len(line) + 1
+
+            embed = Embed(
+                description="# {}: #{}\n{}".format(
+                    stat_key, i + 1, _decorate_code_block(lang="py", text="\n".join(lines))
+                ),
+                colour=colour,
+            )
+
+            if (total_embed_len + len(embed.description)) > (MAX_EMBEDS_LEN - 128):
+                embeds.append(
+                    Embed(description="and other {} failed".format(len(values) - i), colour=colour)
+                )
+                exceeds_embeds_limit = True
+                break
+
+            total_embed_len += len(embed.description)
+            embeds.append(embed)
+
+            if len(embeds) >= MAX_EMBED_CT:
+                break
+
+    return embeds, exceeds_embeds_limit
+
+
 def _make_md_report(config: Config) -> str:
     from pytest_md_report import ColorPolicy, ZerosRender, make_md_report, retrieve_stat_count_map
 
@@ -235,7 +285,7 @@ def pytest_unconfigure(config):
         colour = Colour.green()
 
     embeds = []  # type: List[Embed]
-    embeds_len_ct = 100
+    embeds_len_ct = 0
     exceeds_embeds_limit = False
 
     embed_summary = Embed(
@@ -247,6 +297,7 @@ def pytest_unconfigure(config):
         )
     )
     embeds.append(embed_summary)
+    embeds_len_ct += len(embed_summary.description) + len(embed_summary.footer)
 
     if verbosity_level >= 1:
         pytest_stats = extract_pytest_stats(
@@ -267,32 +318,17 @@ def pytest_unconfigure(config):
             )
 
         for result_type, result_lines in result_lines_map.items():
-            embeds.append(
-                Embed(
-                    description="\n".join(result_lines)[:MAX_EMBED_LEN],
-                    colour=_result_type_to_colour[result_type],
-                )
+            embed = Embed(
+                description="\n".join(result_lines)[:MAX_EMBED_LEN],
+                colour=_result_type_to_colour[result_type],
             )
+            embeds.append(embed)
+            embeds_len_ct += len(embed.description)
 
-        description = _decorate_code_block(lang="md", text="# test results\n{}".format(md_report))
-        embed_summary = Embed(description=description, colour=colour,)
-        embeds_len_ct += len(description)
-
-        longreprs = _extract_longrepr(reporter)
-        for i, description in enumerate(longreprs):
-            description = description[-MAX_EMBED_LEN:]
-
-            if len(embeds) >= MAX_EMBED_CT or (len(description) + embeds_len_ct) > MAX_EMBEDS_LEN:
-                embeds.append(
-                    Embed(
-                        description="and other {} failed".format(len(longreprs) - i), colour=colour
-                    )
-                )
-                exceeds_embeds_limit = True
-                break
-
-            embeds.append(Embed(description=description, colour=colour))
-            embeds_len_ct += len(description)
+        _embeds, exceeds_embeds_limit = _extract_longrepr_embeds(
+            reporter, embeds_len_ct, colour=colour
+        )
+        embeds.extend(_embeds)
 
     header = "test summary info: {} tests".format(sum(stat_count_map.values()))
     attach_file = None
