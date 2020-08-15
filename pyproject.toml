@@ -34,3 +34,5 @@ skip_glob = [
 testpaths = [
     "tests",
 ]
+
+discord_verbose = 1
