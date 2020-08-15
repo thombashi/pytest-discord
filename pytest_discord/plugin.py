@@ -228,6 +228,25 @@ def _make_md_report(config: Config) -> str:
         config.option.md_report_zeros = stash_md_report_zeros
 
 
+def _make_summary_footer(reporter: TerminalReporter, verbosity_level: int) -> str:
+    import platform
+
+    msgs = [
+        "start at {}".format(
+            datetime.fromtimestamp(reporter._sessionstarttime).strftime("%d. %b %H:%M:%S%z")
+        )
+    ]
+
+    if verbosity_level >= 1:
+        uname = platform.uname()
+
+        host_info = "{} {} {} {}".format(uname.system, uname.node, uname.release, uname.machine)
+        python_info = "{} {}".format(platform.python_implementation(), platform.python_version())
+        msgs.extend([host_info, python_info])
+
+    return ",  ".join(msgs)
+
+
 _logs = []
 
 
@@ -291,11 +310,7 @@ def pytest_unconfigure(config):
     embed_summary = Embed(
         description="{} in {:.1f} seconds".format(message, duration), colour=colour
     )
-    embed_summary.set_footer(
-        text="start at {}".format(
-            datetime.fromtimestamp(reporter._sessionstarttime).strftime("%d. %b %H:%M:%S%z")
-        )
-    )
+    embed_summary.set_footer(text=_make_summary_footer(reporter, verbosity_level))
     embeds.append(embed_summary)
     embeds_len_ct += len(embed_summary.description) + len(embed_summary.footer)
 
