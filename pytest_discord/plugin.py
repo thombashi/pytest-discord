@@ -1,5 +1,6 @@
 import asyncio
 import io
+import os
 import time
 from collections import defaultdict
 from datetime import datetime
@@ -198,6 +199,14 @@ def _extract_longrepr_embeds(
     return embeds, exceeds_embeds_limit
 
 
+def _is_ci() -> bool:
+    CI = os.environ.get("CI")
+    if not CI:
+        return False
+
+    return CI.strip().lower() == "true"
+
+
 def _make_md_report(config: Config) -> str:
     from pytest_md_report import ColorPolicy, ZerosRender, make_md_report, retrieve_stat_count_map
 
@@ -226,6 +235,20 @@ def _make_md_report(config: Config) -> str:
     finally:
         config.option.md_report_color = stash_md_report_color
         config.option.md_report_zeros = stash_md_report_zeros
+
+
+def _make_header(tests: int) -> str:
+    msgs = ["{} tests".format(tests)]
+
+    if _is_ci():
+        msgs.append("executed by CI")
+
+        if os.environ.get("GITHUB_ACTION"):
+            repo = os.environ.get("GITHUB_REPOSITORY")
+            workflow = os.environ.get("GITHUB_WORKFLOW")
+            msgs.append("({} {})".format(repo, workflow))
+
+    return "test summary info: {}".format(" ".join(msgs))
 
 
 def _make_summary_footer(reporter: TerminalReporter, verbosity_level: int) -> str:
@@ -345,7 +368,7 @@ def pytest_unconfigure(config):
         )
         embeds.extend(_embeds)
 
-    header = "test summary info: {} tests".format(sum(stat_count_map.values()))
+    header = _make_header(sum(stat_count_map.values()))
     attach_file = None
 
     if opt_retriever.retrieve_attach_file() or exceeds_embeds_limit:
