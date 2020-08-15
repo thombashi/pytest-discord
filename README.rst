@@ -17,13 +17,9 @@ Summary
     :target: https://pypi.org/project/pytest-discord
     :alt: Supported Python implementations
 
-.. image:: https://img.shields.io/travis/thombashi/pytest-discord/master.svg?label=Linux/macOS%20CI
-    :target: https://travis-ci.org/thombashi/pytest-discord
-    :alt: Linux/macOS CI status
-
-.. image:: https://img.shields.io/appveyor/ci/thombashi/pytest-discord/master.svg?label=Windows%20CI
-    :target: https://ci.appveyor.com/project/thombashi/pytest-discord/branch/master
-    :alt: Windows CI status
+.. image:: https://github.com/thombashi/pytest-discord/workflows/Tests/badge.svg
+    :target: https://github.com/thombashi/pytest-discord/actions?query=workflow%3ATests
+    :alt: Linux/macOS/Windows CI status
 
 A pytest plugin to notify test results to a Discord channel.
 
