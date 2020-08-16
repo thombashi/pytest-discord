@@ -56,6 +56,7 @@ setuptools.setup(
     extras_require={"test": TESTS_REQUIRES},
     classifiers=[
         "Development Status :: 3 - Alpha",
+        "Environment :: Plugins",
         "Framework :: Pytest",
         "Intended Audience :: Information Technology",
         "Intended Audience :: Developers",
@@ -67,9 +68,9 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
-        "Programming Language :: Python :: 3 :: Only",
         "Topic :: Communications :: Chat",
         "Topic :: Software Development :: Testing",
     ],
