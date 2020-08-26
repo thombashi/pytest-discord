@@ -21,6 +21,10 @@ Summary
     :target: https://github.com/thombashi/pytest-discord/actions?query=workflow%3ATests
     :alt: Linux/macOS/Windows CI status
 
+.. image:: https://coveralls.io/repos/github/thombashi/pytest-discord/badge.svg?branch=master
+    :target: https://coveralls.io/github/thombashi/pytest-discord?branch=master
+    :alt: Test coverage: coveralls
+
 A pytest plugin to notify test results to a Discord channel.
 
 
