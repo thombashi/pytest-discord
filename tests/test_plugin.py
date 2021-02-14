@@ -111,15 +111,17 @@ def test_pytest_discord_failed(testdir):
 
 
 @pytest.mark.parametrize(
-    ["value", "expected"], [("custom username", "custom username"), ("", "pytest-discord")],
+    ["value", "expected"],
+    [
+        ("custom username", "custom username"),
+        ("", "pytest-discord"),
+    ],
 )
 def test_pytest_discord_username(testdir, value, expected):
     testdir.makepyfile(PYCODE_PASS)
 
     with mock.patch("discord.Webhook.send", new_callable=AsyncMock) as mock_send:
-        testdir.runpytest(
-            "--discord-webhook", DUMMY_WEBHOOK_URL, "--discord-username", value,
-        )
+        testdir.runpytest("--discord-webhook", DUMMY_WEBHOOK_URL, "--discord-username", value)
 
         args = mock_send.call_args[1]
 
@@ -127,7 +129,11 @@ def test_pytest_discord_username(testdir, value, expected):
 
 
 @pytest.mark.parametrize(
-    ["value", "expected"], [("True", SUCCESS_ICON_URL), ("False", FAILED_ICON_URL),]
+    ["value", "expected"],
+    [
+        ("True", SUCCESS_ICON_URL),
+        ("False", FAILED_ICON_URL),
+    ],
 )
 def test_pytest_discord_avatar_url(testdir, value, expected):
     testdir.makepyfile(

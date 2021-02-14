@@ -72,13 +72,19 @@ def pytest_addoption(parser):
     )
 
     parser.addini(
-        Option.DISCORD_WEBHOOK.inioption_str, default=None, help=Option.DISCORD_WEBHOOK.help_msg,
+        Option.DISCORD_WEBHOOK.inioption_str,
+        default=None,
+        help=Option.DISCORD_WEBHOOK.help_msg,
     )
     parser.addini(
-        Option.DISCORD_VERBOSE.inioption_str, default=None, help=Option.DISCORD_VERBOSE.help_msg,
+        Option.DISCORD_VERBOSE.inioption_str,
+        default=None,
+        help=Option.DISCORD_VERBOSE.help_msg,
     )
     parser.addini(
-        Option.DISCORD_USERNAME.inioption_str, default=None, help=Option.DISCORD_USERNAME.help_msg,
+        Option.DISCORD_USERNAME.inioption_str,
+        default=None,
+        help=Option.DISCORD_USERNAME.help_msg,
     )
     parser.addini(
         Option.DISCORD_SUCCESS_ICON.inioption_str,
@@ -140,7 +146,7 @@ def _extract_longrepr(reporter: TerminalReporter) -> List[str]:
                 if value.longrepr:
                     messages.append(
                         "# {}: #{}\n{}".format(
-                            stat_key, i + 1, _decorate_code_block(lang="py", text=value.longrepr),
+                            stat_key, i + 1, _decorate_code_block(lang="py", text=value.longrepr)
                         )
                     )
             except AttributeError:
@@ -414,7 +420,7 @@ async def _send_message(
             return
 
         await webhook.send(
-            header, username=username, avatar_url=avatar_url, embeds=embeds, file=attach_file,
+            header, username=username, avatar_url=avatar_url, embeds=embeds, file=attach_file
         )
 
 
