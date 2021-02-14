@@ -260,15 +260,16 @@ def _make_header(tests: int) -> str:
 def _make_summary_footer(reporter: TerminalReporter, verbosity_level: int) -> str:
     import platform
 
-    msgs = [
-        "start at {}".format(
-            datetime.fromtimestamp(reporter._sessionstarttime).strftime("%d. %b %H:%M:%S%z")
-        )
-    ]
+    msgs = []
 
     if verbosity_level >= 1:
-        uname = platform.uname()
+        msgs.append(
+            "start at {}".format(
+                datetime.fromtimestamp(reporter._sessionstarttime).strftime("%d. %b %H:%M:%S%z")
+            )
+        )
 
+        uname = platform.uname()
         host_info = "{} {} {} {}".format(uname.system, uname.node, uname.release, uname.machine)
         python_info = "{} {}".format(platform.python_implementation(), platform.python_version())
         msgs.extend([host_info, python_info])
