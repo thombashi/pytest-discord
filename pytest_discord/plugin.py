@@ -1,6 +1,7 @@
 import asyncio
 import io
 import os
+import platform
 import time
 from collections import defaultdict
 from datetime import datetime
@@ -254,7 +255,9 @@ def _make_header(tests: int) -> str:
             workflow = os.environ.get("GITHUB_WORKFLOW")
             msgs.append("({} {})".format(repo, workflow))
 
-    return "test summary info: {}".format(" ".join(msgs))
+    return "test summary info: {}: {} Python {}".format(
+        " ".join(msgs), platform.system(), ".".join(platform.python_version_tuple())
+    )
 
 
 def _make_summary_footer(reporter: TerminalReporter, verbosity_level: int) -> str:
