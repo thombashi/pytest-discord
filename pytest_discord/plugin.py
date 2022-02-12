@@ -126,13 +126,13 @@ def _make_results_message(reporter: TerminalReporter) -> Tuple[str, Dict[str, in
         stat_count_map[name] = count
 
         if count:
-            messages.append("{} {}".format(count, _normalize_stat_name(name)))
+            messages.append(f"{count} {_normalize_stat_name(name)}")
 
     return (", ".join(messages), stat_count_map)
 
 
 def _decorate_code_block(lang: str, text: str) -> str:
-    return "```{lang}\n{body}\n```\n".format(lang=lang, body=text)
+    return f"```{lang}\n{text}\n```\n"
 
 
 def _extract_longrepr(reporter: TerminalReporter) -> List[str]:
@@ -192,7 +192,7 @@ def _extract_longrepr_embeds(
 
             if (total_embed_len + len(embed.description)) > (MAX_EMBEDS_LEN - 128):
                 embeds.append(
-                    Embed(description="and other {} failed".format(len(values) - i), colour=colour)
+                    Embed(description=f"and other {len(values) - i} failed", colour=colour)
                 )
                 exceeds_embeds_limit = True
                 break
@@ -245,7 +245,7 @@ def _make_md_report(config: Config) -> str:
 
 
 def _make_header(tests: int) -> str:
-    msgs = ["{} tests".format(tests)]
+    msgs = [f"{tests} tests"]
 
     if _is_ci():
         msgs.append("executed by CI")
@@ -253,7 +253,7 @@ def _make_header(tests: int) -> str:
         if os.environ.get("GITHUB_ACTION"):
             repo = os.environ.get("GITHUB_REPOSITORY")
             workflow = os.environ.get("GITHUB_WORKFLOW")
-            msgs.append("({} {})".format(repo, workflow))
+            msgs.append(f"({repo} {workflow})")
 
     return "test summary info: {}: {} Python {}".format(
         " ".join(msgs), platform.system(), ".".join(platform.python_version_tuple())
@@ -273,8 +273,8 @@ def _make_summary_footer(reporter: TerminalReporter, verbosity_level: int) -> st
         )
 
         uname = platform.uname()
-        host_info = "{} {} {} {}".format(uname.system, uname.node, uname.release, uname.machine)
-        python_info = "{} {}".format(platform.python_implementation(), platform.python_version())
+        host_info = f"{uname.system} {uname.node} {uname.release} {uname.machine}"
+        python_info = f"{platform.python_implementation()} {platform.python_version()}"
         msgs.extend([host_info, python_info])
 
     return ",  ".join(msgs)
@@ -284,11 +284,11 @@ _logs = []
 
 
 def extract_result_type(pytest_stats: Mapping[str, int]) -> TestResultType:
-    if sum([pytest_stats[name] for name in ("failed", "error")]):
+    if sum(pytest_stats[name] for name in ("failed", "error")):
         return TestResultType.FAIL
 
     if (
-        sum([pytest_stats[name] for name in ("skipped", "xfailed", "xpassed")])
+        sum(pytest_stats[name] for name in ("skipped", "xfailed", "xpassed"))
         and pytest_stats["passed"] == 0
     ):
         return TestResultType.SKIP
@@ -323,11 +323,11 @@ def pytest_unconfigure(config):
 
     message, stat_count_map = _make_results_message(reporter)
 
-    if sum([stat_count_map[name] for name in ["failed", "error"]]):
+    if sum(stat_count_map[name] for name in ["failed", "error"]):
         avatar_url = opt_retriever.retrieve_fail_icon()
         colour = Colour.red()
     elif (
-        sum([stat_count_map[name] for name in ("skipped", "xfailed", "xpassed")])
+        sum(stat_count_map[name] for name in ("skipped", "xfailed", "xpassed"))
         and stat_count_map["passed"] == 0
     ):
         avatar_url = opt_retriever.retrieve_skip_icon()
@@ -340,9 +340,7 @@ def pytest_unconfigure(config):
     embeds_len_ct = 0
     exceeds_embeds_limit = False
 
-    embed_summary = Embed(
-        description="{} in {:.1f} seconds".format(message, duration), colour=colour
-    )
+    embed_summary = Embed(description=f"{message} in {duration:.1f} seconds", colour=colour)
     embed_summary.set_footer(text=_make_summary_footer(reporter, verbosity_level))
     embeds.append(embed_summary)
     embeds_len_ct += len(embed_summary.description) + len(embed_summary.footer)
@@ -359,9 +357,7 @@ def pytest_unconfigure(config):
             result_lines_map[extract_result_type(stats)].append(
                 "`{}`: {}".format(
                     ":".join(key),
-                    ", ".join(
-                        ["`{}` {}".format(ct, outcome) for outcome, ct in stats.items() if ct > 0]
-                    ),
+                    ", ".join([f"`{ct}` {outcome}" for outcome, ct in stats.items() if ct > 0]),
                 )
             )
 
@@ -420,7 +416,7 @@ async def _send_message(
         try:
             webhook = Webhook.from_url(url, adapter=AsyncWebhookAdapter(session))
         except (InvalidArgument, HTTPException, NotFound, Forbidden) as e:
-            reporter.write_line("pytest-discord error: {}".format(str(e)))
+            reporter.write_line(f"pytest-discord error: {str(e)}")
             return
 
         await webhook.send(

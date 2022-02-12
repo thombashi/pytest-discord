@@ -1,4 +1,4 @@
-from enum import Enum, unique
+from enum import Enum, auto, unique
 from textwrap import dedent
 
 from pathvalidate import replace_symbol
@@ -12,9 +12,9 @@ class Default:
 
 @unique
 class TestResultType(Enum):
-    SUCCESS = 1
-    SKIP = 2
-    FAIL = 3
+    SUCCESS = auto()
+    SKIP = auto()
+    FAIL = auto()
 
 
 @unique
@@ -34,7 +34,7 @@ class Option(Enum):
     )
     DISCORD_USERNAME = (
         "discord-username",
-        "name for a message. defaults to {}.".format(Default.USERNAME),
+        f"name for a message. defaults to {Default.USERNAME}.",
     )
     DISCORD_SUCCESS_ICON = (
         "discord-success-icon",
