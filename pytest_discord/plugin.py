@@ -175,7 +175,7 @@ def _extract_longrepr_embeds(
                 continue
 
             lines_len = 0
-            lines = []  # type: List[str]
+            lines: List[str] = []
             for line in reversed(str(value.longrepr).splitlines()):
                 if (lines_len + len(line)) > (MAX_EMBED_LEN - 64):
                     break
@@ -336,7 +336,7 @@ def pytest_unconfigure(config):
         avatar_url = opt_retriever.retrieve_success_icon()
         colour = Colour.green()
 
-    embeds = []  # type: List[Embed]
+    embeds: List[Embed] = []
     embeds_len_ct = 0
     exceeds_embeds_limit = False
 

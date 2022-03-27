@@ -38,7 +38,7 @@ class DiscordOptRetriever:
         return verbosity_level
 
     def retrieve_username(self) -> str:
-        username = self.__retrieve_discord_opt(Option.DISCORD_USERNAME)  # type: ignore
+        username = self.__retrieve_discord_opt(Option.DISCORD_USERNAME)
 
         if not username:
             return Default.USERNAME
