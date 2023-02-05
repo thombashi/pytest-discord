@@ -7,7 +7,7 @@ from pytest_md_report import ColorPolicy
 
 class Default:
     COLOR = ColorPolicy.AUTO
-    USERNAME = "pytest-discord"
+    USERNAME = "pytest"
 
 
 @unique
