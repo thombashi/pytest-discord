@@ -114,7 +114,7 @@ def test_pytest_discord_failed(testdir):
     ["value", "expected"],
     [
         ("custom username", "custom username"),
-        ("", "pytest-discord"),
+        ("", "pytest"),
     ],
 )
 def test_pytest_discord_username(testdir, value, expected):
