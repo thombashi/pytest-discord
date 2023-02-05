@@ -40,7 +40,7 @@ Quick start
 
 Making a Discord webhook
 --------------------------------------------
-https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+`Intro to Webhooks – Discord <https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks>`__
 
 
 Usage
@@ -64,10 +64,10 @@ Or, set a webhook URL to an environment variable ``PYTEST_DISCORD_WEBHOOK``:
     $ export PYTEST_DISCORD_WEBHOOK=<https://discordapp.com/api/webhooks/...>
     $ pytest
 
-Or, you can specify webhook URL of a discord channel via ini-options (described later).
+Or, you can specify a webhook URL of a discord channel via ``ini-options`` (described later).
 
 
-Increse the verbosity level
+Increase the verbosity level
 --------------------------------------------
 ::
 
@@ -79,8 +79,8 @@ Increse the verbosity level
 
     Notification message example
 
-Notification messages may omit information caused by Discord limitations (especially when errors occurred).
-You can get full messages as an attached markdown file with ``--discord-attach-file`` option
+Notification messages may omit information caused by Discord limitations (especially when errors occur).
+You can get full messages as an attached markdown file with ``--discord-attach-file`` option.
 
 
 Options
@@ -96,14 +96,15 @@ Command options
                             pytest results. you can also specify the value with
                             PYTEST_DISCORD_WEBHOOK environment variable.
       --discord-verbose=VERBOSITY_LEVEL
-                            verbosity level for pytest-discord. if not set, using
-                            verbosity level of pytest.
+                            verbosity level for pytest-discord.
+                            if not set, the verbosity level will be the same as with
+                            pytest.
                             defaults to 0.
                             you can also specify the value with
                             PYTEST_DISCORD_VERBOSE environment variable.
       --discord-username=DISCORD_USERNAME
-                            name for a message. defaults to pytest-discord. you can
-                            also specify the value with PYTEST_DISCORD_USERNAME
+                            name for a message. defaults to pytest. you can also
+                            specify the value with PYTEST_DISCORD_USERNAME
                             environment variable.
       --discord-success-icon=ICON_URL
                             url to an icon of a successful run. you can also specify
@@ -133,10 +134,11 @@ ini-options
                         discord webhook url of a discord channel to notify
                         pytest results.
   discord_verbose (string):
-                        verbosity level for pytest-discord. if not set, using
-                        verbosity level of pytest. defaults to 0.
+                        verbosity level for pytest-discord. if not set, the
+                        verbosity level will be the same as with pytest.
+                        defaults to 0.
   discord_username (string):
-                        name for a message. defaults to pytest-discord.
+                        name for a message. defaults to pytest.
   discord_success_icon (string):
                         url to an icon of a successful run.
   discord_skip_icon (string):
@@ -164,5 +166,5 @@ ini-options
 
 Dependencies
 ============================================
-- Python 3.6+
+- Python 3.7+
 - `Python package dependencies (automatically installed) <https://github.com/thombashi/pytest-discord/network/dependencies>`__
