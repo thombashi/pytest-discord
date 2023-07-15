@@ -92,36 +92,22 @@ Command options
 
     notify test results to a discord channel:
       --discord-webhook=WEBHOOK_URL
-                            discord webhook url of a discord channel to notify
-                            pytest results. you can also specify the value with
-                            PYTEST_DISCORD_WEBHOOK environment variable.
+                            discord webhook url of a discord channel to notify pytest results. you can also specify the value with PYTEST_DISCORD_WEBHOOK environment variable.
       --discord-verbose=VERBOSITY_LEVEL
-                            verbosity level for pytest-discord.
-                            if not set, the verbosity level will be the same as with
-                            pytest.
-                            defaults to 0.
-                            you can also specify the value with
-                            PYTEST_DISCORD_VERBOSE environment variable.
+                            Verbosity level for pytest-discord.
+                            If not set, use the verbosity level of pytest.
+                            Defaults to 0.
+                            you can also specify the value with PYTEST_DISCORD_VERBOSE environment variable.
       --discord-username=DISCORD_USERNAME
-                            name for a message. defaults to pytest. you can also
-                            specify the value with PYTEST_DISCORD_USERNAME
-                            environment variable.
+                            name for a message. defaults to pytest. you can also specify the value with PYTEST_DISCORD_USERNAME environment variable.
       --discord-success-icon=ICON_URL
-                            url to an icon of a successful run. you can also specify
-                            the value with PYTEST_DISCORD_SUCCESS_ICON environment
-                            variable.
+                            url to an icon of a successful run. you can also specify the value with PYTEST_DISCORD_SUCCESS_ICON environment variable.
       --discord-skip-icon=ICON_URL
-                            url to an icon of a skipped run. you can also specify
-                            the value with PYTEST_DISCORD_SKIP_ICON environment
-                            variable.
+                            url to an icon of a skipped run. you can also specify the value with PYTEST_DISCORD_SKIP_ICON environment variable.
       --discord-fail-icon=ICON_URL
-                            url to an icon of a failed run. you can also specify the
-                            value with PYTEST_DISCORD_FAIL_ICON environment
-                            variable.
+                            url to an icon of a failed run. you can also specify the value with PYTEST_DISCORD_FAIL_ICON environment variable.
       --discord-attach-file
-                            post pytest results as a markdown file to a discord
-                            channel. you can also specify the value with
-                            PYTEST_DISCORD_ATTACH_FILE environment variable.
+                            post pytest results as a markdown file to a discord channel. you can also specify the value with PYTEST_DISCORD_ATTACH_FILE environment variable.
 
 
 ini-options
@@ -131,12 +117,9 @@ ini-options
 ::
 
   discord_webhook (string):
-                        discord webhook url of a discord channel to notify
-                        pytest results.
+                        discord webhook url of a discord channel to notify pytest results.
   discord_verbose (string):
-                        verbosity level for pytest-discord. if not set, the
-                        verbosity level will be the same as with pytest.
-                        defaults to 0.
+                        Verbosity level for pytest-discord. If not set, use the verbosity level of pytest. Defaults to 0.
   discord_username (string):
                         name for a message. defaults to pytest.
   discord_success_icon (string):
@@ -146,8 +129,7 @@ ini-options
   discord_fail_icon (string):
                         url to an icon of a failed run.
   discord_attach_file (bool):
-                        post pytest results as a markdown file to a discord
-                        channel.
+                        post pytest results as a markdown file to a discord channel.
 
 :Example of ``pyproject.toml``:
     .. code-block:: toml
