@@ -390,8 +390,7 @@ def pytest_unconfigure(config: Config) -> None:
             ),
         )
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(
+    asyncio.run(
         _send_message(
             reporter=reporter,
             url=url,
