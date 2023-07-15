@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import Any, Optional
 
 from _pytest.config import Config
 from typepy import Bool, Integer, StrictLevel
@@ -94,7 +94,7 @@ class DiscordOptRetriever:
         return value
 
     @staticmethod
-    def _to_int(value) -> Optional[int]:
+    def _to_int(value: Any) -> Optional[int]:
         try:
             return Integer(value, strict_level=StrictLevel.MIN).convert()
         except TypeConversionError:

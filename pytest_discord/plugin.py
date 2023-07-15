@@ -10,6 +10,7 @@ from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 import aiohttp
 import pytest
 from _pytest.config import Config
+from _pytest.config.argparsing import Parser
 from _pytest.terminal import TerminalReporter
 from discord import AsyncWebhookAdapter, Colour, Embed, File, Webhook
 from discord.errors import Forbidden, HTTPException, InvalidArgument, NotFound
@@ -24,7 +25,7 @@ MAX_EMBEDS_LEN = 6000
 MAX_EMBED_CT = 10
 
 
-def pytest_addoption(parser):
+def pytest_addoption(parser: Parser) -> None:
     group = parser.getgroup("discord", "notify test results to a discord channel")
 
     group.addoption(
@@ -303,7 +304,7 @@ _result_type_to_colour = {
 }
 
 
-def pytest_unconfigure(config):
+def pytest_unconfigure(config: Config) -> None:
     if config.option.help:
         return
 
