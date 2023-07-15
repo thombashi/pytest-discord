@@ -27,9 +27,9 @@ class Option(Enum):
         "discord-verbose",
         dedent(
             """\
-            verbosity level for pytest-discord.
-            if not set, the verbosity level will be the same as with pytest.
-            defaults to 0.
+            Verbosity level for pytest-discord.
+            If not set, use the verbosity level of pytest.
+            Defaults to 0.
             """
         ),
     )
