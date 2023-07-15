@@ -8,7 +8,7 @@ jobs:
     permissions:
       contents: read
     concurrency:
-      group: ${{ github.workflow }}-${{ github.job }}
+      group: ${{ github.event_name }}-${{ github.workflow }}-lint
       cancel-in-progress: true
     timeout-minutes: 20
     container:
@@ -30,6 +30,9 @@ jobs:
         exclude:
           - os: windows-latest
             python-version: '3.11'
+    concurrency:
+      group: ${{ github.event_name }}-${{ github.workflow }}-ut-${{ matrix.os }}-${{ matrix.python-version }}
+      cancel-in-progress: true
     timeout-minutes: 20
 
     steps:
