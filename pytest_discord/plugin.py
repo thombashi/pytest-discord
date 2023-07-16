@@ -239,7 +239,7 @@ def _make_md_report(config: Config) -> str:
         config.option.md_report_color = ColorPolicy.NEVER
         config.option.md_report_zeros = ZerosRender.EMPTY
 
-        return make_md_report(config, reporter, stat_count_map)
+        return make_md_report(config, reporter, stat_count_map, ColorPolicy.NEVER)
     finally:
         config.option.md_report_color = stash_md_report_color
         config.option.md_report_zeros = stash_md_report_zeros
