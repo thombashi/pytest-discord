@@ -14,6 +14,7 @@ from _pytest.config.argparsing import Parser
 from _pytest.terminal import TerminalReporter
 from discord import AsyncWebhookAdapter, Colour, Embed, File, Webhook
 from discord.errors import Forbidden, HTTPException, InvalidArgument, NotFound
+from pytablewriter.writer.text import MarkdownFlavor
 from pytest_md_report.plugin import extract_pytest_stats
 
 from ._const import HelpMsg, Option, TestResultType
