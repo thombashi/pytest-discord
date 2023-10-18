@@ -17,9 +17,9 @@ Summary
     :target: https://pypi.org/project/pytest-discord
     :alt: Supported Python implementations
 
-.. image:: https://github.com/thombashi/pytest-discord/workflows/Tests/badge.svg
-    :target: https://github.com/thombashi/pytest-discord/actions?query=workflow%3ATests
-    :alt: Linux/macOS/Windows CI status
+.. image:: https://github.com/thombashi/pytest-discord/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/thombashi/pytest-discord/actions/workflows/ci.yml
+    :alt: CI status of Linux/macOS/Windows
 
 .. image:: https://coveralls.io/repos/github/thombashi/pytest-discord/badge.svg?branch=master
     :target: https://coveralls.io/github/thombashi/pytest-discord?branch=master
