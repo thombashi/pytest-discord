@@ -14,7 +14,7 @@ jobs:
   build-package:
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref_name }}-build
+      group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref_name }}-build-pkg
       cancel-in-progress: true
     timeout-minutes: 20
     container:
@@ -30,7 +30,7 @@ jobs:
     permissions:
       contents: read
     concurrency:
-      group: ${{ github.event_name }}-${{ github.workflow }}-lint
+      group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref_name }}-lint
       cancel-in-progress: true
     timeout-minutes: 20
     container:
@@ -53,7 +53,7 @@ jobs:
           - os: windows-latest
             python-version: "3.11"
     concurrency:
-      group: ${{ github.event_name }}-${{ github.workflow }}-ut-${{ matrix.os }}-${{ matrix.python-version }}
+      group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref_name }}-ut-${{ matrix.os }}-${{ matrix.python-version }}
       cancel-in-progress: true
     timeout-minutes: 20
 
