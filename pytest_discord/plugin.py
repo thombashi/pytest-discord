@@ -235,6 +235,8 @@ def _make_md_report(config: Config) -> str:
         config.option.md_report_verbose = max(0, verbosity_level - 1)
     if not hasattr(config.option, "md_report_margin"):
         config.option.md_report_margin = 1
+    if not hasattr(config.option, "md_report_exclude_outcomes"):
+        config.option.md_report_exclude_outcomes = []
 
     try:
         config.option.md_report_color = ColorPolicy.NEVER
