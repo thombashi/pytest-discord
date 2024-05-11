@@ -140,9 +140,7 @@ def test_pytest_discord_avatar_url(testdir, value, expected):
         """
         def test_avatar_url():
             assert {}
-        """.format(
-            value
-        )
+        """.format(value)
     )
 
     with mock.patch("discord.Webhook.send", new_callable=AsyncMock) as mock_send:
