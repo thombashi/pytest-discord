@@ -12,8 +12,9 @@ import pytest
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
 from _pytest.terminal import TerminalReporter
-from discord import AsyncWebhookAdapter, Colour, Embed, File, Webhook
-from discord.errors import Forbidden, HTTPException, InvalidArgument, NotFound
+from discord import Colour, Embed, File, Webhook
+from discord.errors import Forbidden, HTTPException, NotFound
+from discord.utils import MISSING
 from pytablewriter.writer.text import MarkdownFlavor
 from pytest_md_report.plugin import extract_pytest_stats
 
@@ -192,6 +193,7 @@ def _extract_longrepr_embeds(
                 colour=colour,
             )
 
+            assert embed.description is not None
             if (total_embed_len + len(embed.description)) > (MAX_EMBEDS_LEN - 128):
                 embeds.append(
                     Embed(description=f"and other {len(values) - i} failed", colour=colour)
@@ -356,7 +358,9 @@ def pytest_unconfigure(config: Config) -> None:
     embed_summary = Embed(description=f"{message} in {duration:.1f} seconds", colour=colour)
     embed_summary.set_footer(text=_make_summary_footer(reporter, verbosity_level))
     embeds.append(embed_summary)
-    embeds_len_ct += len(embed_summary.description) + len(embed_summary.footer)
+    assert embed_summary.description is not None
+    assert embed_summary.footer.text is not None
+    embeds_len_ct += len(embed_summary.description) + len(embed_summary.footer.text)
 
     if verbosity_level >= 1:
         pytest_stats = extract_pytest_stats(
@@ -380,6 +384,7 @@ def pytest_unconfigure(config: Config) -> None:
                 colour=_result_type_to_colour[result_type],
             )
             embeds.append(embed)
+            assert embed.description is not None
             embeds_len_ct += len(embed.description)
 
         _embeds, exceeds_embeds_limit = _extract_longrepr_embeds(
@@ -419,20 +424,25 @@ async def _send_message(
     reporter: TerminalReporter,
     url: str,
     header: str,
-    username: Optional[str],
+    username: str,
     avatar_url: Optional[str],
     embeds: Sequence[Embed],
     attach_file: Optional[File] = None,
 ) -> None:
+    if attach_file:
+        afile = attach_file
+    else:
+        afile = MISSING
+
     async with aiohttp.ClientSession() as session:
         try:
-            webhook = Webhook.from_url(url, adapter=AsyncWebhookAdapter(session))
-        except (InvalidArgument, HTTPException, NotFound, Forbidden) as e:
+            webhook = Webhook.from_url(url, session=session)
+        except (TypeError, ValueError, HTTPException, NotFound, Forbidden) as e:
             reporter.write_line(f"pytest-discord error: {str(e)}")
             return
 
         await webhook.send(
-            header, username=username, avatar_url=avatar_url, embeds=embeds, file=attach_file
+            header, username=username, avatar_url=avatar_url, embeds=embeds, file=afile
         )
 
 
