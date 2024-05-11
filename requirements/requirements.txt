@@ -1,6 +1,6 @@
 aiohttp>=3.6,<4
 discord.py>=1.0.1,<2
 pathvalidate>=2.5.2,<4
-pytest>=3.3.2,<8,!=6.0.0
+pytest>=3.3.2,<9,!=6.0.0
 pytest-md-report>=0.6.1,<1
 typepy>=1.1.4,<2
