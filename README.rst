@@ -5,25 +5,31 @@
 
 Summary
 ============================================
-.. image:: https://badge.fury.io/py/pytest-discord.svg
+|PyPI pkg ver| |Supported Python ver| |Supported Python impl| |CI status| |Test coverage| |CodeQL|
+
+.. |PyPI pkg ver| image:: https://badge.fury.io/py/pytest-discord.svg
     :target: https://badge.fury.io/py/pytest-discord
     :alt: PyPI package version
 
-.. image:: https://img.shields.io/pypi/pyversions/pytest-discord.svg
-    :target: https://pypi.org/project/pytest-discord
-    :alt: Supported Python versions
-
-.. image:: https://img.shields.io/pypi/implementation/pytest-discord.svg
+.. |Supported Python impl| image:: https://img.shields.io/pypi/implementation/pytest-discord.svg
     :target: https://pypi.org/project/pytest-discord
     :alt: Supported Python implementations
 
-.. image:: https://github.com/thombashi/pytest-discord/actions/workflows/ci.yml/badge.svg
+.. |Supported Python ver| image:: https://img.shields.io/pypi/pyversions/pytest-discord.svg
+    :target: https://pypi.org/project/pytest-discord
+    :alt: Supported Python versions
+
+.. |CI status| image:: https://github.com/thombashi/pytest-discord/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/thombashi/pytest-discord/actions/workflows/ci.yml
     :alt: CI status of Linux/macOS/Windows
 
-.. image:: https://coveralls.io/repos/github/thombashi/pytest-discord/badge.svg?branch=master
+.. |Test coverage| image:: https://coveralls.io/repos/github/thombashi/pytest-discord/badge.svg?branch=master
     :target: https://coveralls.io/github/thombashi/pytest-discord?branch=master
     :alt: Test coverage: coveralls
+
+.. |CodeQL| image:: https://github.com/thombashi/pytest-discord/actions/workflows/github-code-scanning/codeql/badge.svg
+    :target: https://github.com/thombashi/pytest-discord/actions/workflows/github-code-scanning/codeql
+    :alt: CodeQL
 
 A pytest plugin to notify test results to a Discord channel.
 
@@ -148,5 +154,5 @@ ini-options
 
 Dependencies
 ============================================
-- Python 3.7+
+- Python 3.8+
 - `Python package dependencies (automatically installed) <https://github.com/thombashi/pytest-discord/network/dependencies>`__
