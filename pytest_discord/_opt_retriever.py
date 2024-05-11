@@ -76,7 +76,12 @@ class DiscordOptRetriever:
         if value is None:
             return False
 
-        return value
+        try:
+            return Bool(value, strict_level=StrictLevel.MIN).convert()
+        except TypeConversionError:
+            pass
+
+        return False
 
     def __retrieve_discord_opt(self, discord_opt: Option) -> Optional[str]:
         config = self.__config
@@ -91,7 +96,15 @@ class DiscordOptRetriever:
         if not value:
             value = config.getini(discord_opt.inioption_str)
 
-        return value
+        if value is None:
+            return None
+
+        if isinstance(value, str):
+            return value
+
+        raise RuntimeError(
+            f"unexpected value type: expected=Option[str], actual={type(value)}, value={value}"
+        )
 
     @staticmethod
     def _to_int(value: Any) -> Optional[int]:

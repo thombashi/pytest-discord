@@ -61,6 +61,19 @@ testpaths = [
 
 discord_verbose = 1
 
+[tool.pyright]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+    ".tox",
+    ".venv",
+    "_build",
+    "_sandbox",
+    "build",
+    "dist"
+]
+pythonVersion = "3.8"
+
 [tool.ruff]
 line-length = 100
 target-version = "py38"

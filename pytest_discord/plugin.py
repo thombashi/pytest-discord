@@ -216,12 +216,11 @@ def _is_ci() -> bool:
     return CI.strip().lower() == "true"
 
 
-def _make_md_report(config: Config) -> str:
+def _make_md_report(config: Config, reporter: TerminalReporter) -> str:
     from pytest_md_report import ColorPolicy, ZerosRender, make_md_report, retrieve_stat_count_map
 
     opt_retriever = DiscordOptRetriever(config)
     verbosity_level = opt_retriever.retrieve_verbosity_level()
-    reporter = config.pluginmanager.get_plugin("terminalreporter")
     stat_count_map = retrieve_stat_count_map(reporter)
 
     stash_md_report_color = (
@@ -325,7 +324,10 @@ def pytest_unconfigure(config: Config) -> None:
 
     verbosity_level = opt_retriever.retrieve_verbosity_level()
     reporter = config.pluginmanager.get_plugin("terminalreporter")
-    md_report = _make_md_report(config)
+    if reporter is None:
+        return
+
+    md_report = _make_md_report(config, reporter)
 
     try:
         duration = time.time() - reporter._sessionstarttime
