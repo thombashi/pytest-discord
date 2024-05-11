@@ -7,10 +7,12 @@ on:
     paths-ignore:
       - ".gitignore"
       - "README.rst"
+      - "ss/*"
   pull_request:
     paths-ignore:
       - ".gitignore"
       - "README.rst"
+      - "ss/*"
 
 permissions:
   contents: read
